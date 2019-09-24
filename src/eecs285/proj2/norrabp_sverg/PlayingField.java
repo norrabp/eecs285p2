@@ -4,10 +4,18 @@
  * See https://eecs285.github.io/p2-tefball/ for the specification.
  */
 
-package eecs285.proj2.<norrabp>; // replace with your uniqname
+package eecs285.proj2.norrabp_sverg; // replace with your uniqname
+
+import java.util.List;
+import java.util.ArrayList;
 
 public class PlayingField {
 
+  List<Player> players = new ArrayList<>();
+  ArrayList<ArrayList<Character>> field = new ArrayList<ArrayList<Character>>();
+  int numPlayers;
+  int totalPlayers;
+  int totalQuarterbacks;
   /**
    * Creates a PlayingField object.
    *
@@ -18,7 +26,16 @@ public class PlayingField {
   PlayingField(int numPlayers,
                int fieldWidth,
                int fieldHeight) {
-    // your code here
+    ArrayList<Character> row = new ArrayList<Character>();
+    for (int i = 0; i < fieldWidth; i++) {
+      row.add('-');
+    }
+    for (int i = 0; i < fieldHeight; i++) {
+      field.add(row);
+    }
+    this.numPlayers = numPlayers;
+    totalPlayers = 0;
+    totalQuarterbacks = 0;
   }
 
   /**
@@ -45,7 +62,15 @@ public class PlayingField {
                       double throwToRow,
                       double speed,
                       double throwSpeed) {
-    // your code here
+    Quarterback q = new Quarterback(playerIndex, startColumn, startRow,
+                                    stopColumn, stopRow, throwToColumn,
+                                    throwToRow, speed, throwSpeed);
+    totalQuarterbacks++;
+    totalPlayers++;
+    players.add(q);
+    int column = roundDouble(startColumn);
+    int row = roundDouble(startRow);
+    field.get(column).set(row, 'Q');
   }
 
   /**
@@ -71,7 +96,14 @@ public class PlayingField {
                    double stopColumn,
                    double stopRow,
                    double speed) {
-    // your code here
+    Receiver r = new Receiver(playerIndex, startColumn, startRow,
+                              intermediateColumn, intermediateRow, stopColumn,
+                              stopRow, speed);
+    totalPlayers++;
+    players.add(r);
+    int column = roundDouble(startColumn);
+    int row = roundDouble(startRow);
+    field.get(column).set(row, 'R');
   }
 
   /**
@@ -87,7 +119,12 @@ public class PlayingField {
                    double startColumn,
                    double startRow,
                    double speed) {
-    // your code here
+    Defender d = new Defender(playerIndex, startColumn, startRow, speed);
+    totalPlayers++;
+    players.add(d);
+    int column = roundDouble(startColumn);
+    int row = roundDouble(startRow);
+    field.get(column).set(row, 'D');
   }
 
   /**
@@ -99,7 +136,13 @@ public class PlayingField {
    * @return  whether or not the game is valid
    */
   boolean checkIsValidGame() {
-    return false; // replace with your solution
+    if (totalPlayers != numPlayers) {
+      return false;
+    }
+    if (totalQuarterbacks != 1) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -117,6 +160,20 @@ public class PlayingField {
    *
    * @return  enum value corresponding to the result of the game
    */
+
+  int roundDouble(double num) {
+    /**
+     * @param num  the double to be rounded
+     * @return integer of double rounded to nearest int
+     */
+    if (num - (int)num < 0.5) {
+      return (int)num;
+    }
+    else {
+      return (int)num + 1;
+    }
+  }
+
   GameResultEnum playBall() {
     return GameResultEnum.ONGOING; // replace with your solution
   }

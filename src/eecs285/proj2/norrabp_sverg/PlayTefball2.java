@@ -1,4 +1,4 @@
-package eecs285.proj2.<norrabp>; // replace with your uniqname
+package eecs285.proj2.norrabp_sverg; // replace with your uniqname
 
 import static java.lang.System.out;
 
